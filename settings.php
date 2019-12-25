@@ -9,7 +9,7 @@
 		$classes = $_SESSION['class_value'];
 		?>
 		<title>Edit Settings</title>
-		<link href="style3.css" rel="stylesheet" type="text/css" />
+		<link href="assets/css/style3.css" rel="stylesheet" type="text/css" />
 		<style>
 			body {color: <?php echo $color;?>;}
 			a {color: <?php echo $color;?>;}

@@ -3,8 +3,8 @@
 	<head>
 		<title>Agenda Login</title>
 		<!--<link rel="stylesheet" type="text/css" href="style3.css" />-->
-		<link href="style3.css" rel="stylesheet" type="text/css" media="only screen and (min-device-width: 801px)" />
-		<link href="mobile.css" rel="stylesheet" type="text/css" media="only screen and (max-device-width: 800px)" />
+		<link href="assets/css/style3.css" rel="stylesheet" type="text/css" media="only screen and (min-device-width: 801px)" />
+		<link href="assets/css/mobile.css" rel="stylesheet" type="text/css" media="only screen and (max-device-width: 800px)" />
 	</head>
 	<body>
 		<?php

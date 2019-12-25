@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>Agenda Registration</title>
-		<link href="style3.css" rel="stylesheet" type="text/css" />
+		<link href="assets/css/style3.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
 		<div id="wrapper">

@@ -3,7 +3,7 @@
 	<head>
 		<title>Finished Task</title>
 		<!--<link rel="stylesheet" type="text/css" href="actionstyle.css" />-->
-		<link rel="stylesheet" type="text/css" href="style3.css" />
+		<link rel="stylesheet" type="text/css" href="assets/css/style3.css" />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script>
 			function loader(input) {
