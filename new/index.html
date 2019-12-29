@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Agenda Login</title>
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script type="text/javascript" src="assets/js/func.js"></script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <h1 id="title">Agenda Login</h1>
+            <p id="errorMessage"></p>
+            <div id="loginContain">
+				<form id="loginForm">
+					<p class="loginP">Username:</p>
+					<input type="text" name="user" id="loginFormUser" />
+					<p class="loginP">Password:</p>
+					<input type="password" name="pass" id="loginFormPass" /><br /><br />
+                    <!-- <input type="submit" /> -->
+                    <input id="formSubmit" type="button" value="Login" onclick="login()" />
+				</form><br/>
+				<span><a href="register.html">Don't have an account yet? Register here!</a></span>
+			</div>
+        </div>
+    </body>
+</html>
