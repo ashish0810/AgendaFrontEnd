@@ -8,7 +8,6 @@ function login() {
     var url = urlBase + "/login"
     $.ajax({
         type: "POST",
-        async: false,
         url: url,
         data: {
             'user': user,
@@ -31,6 +30,73 @@ function login() {
             }
         }
     });
+}
+
+function logout() {
+    clearCookies();
+    document.location.href = "index.html";
+}
+
+function fillAgendaPage() {
+    var name = getCookie("name");
+    document.title = name + "'s Agenda";
+    document.getElementById("title").innerHTML = name + "'s Agenda";
+}
+
+function fillTasks() {
+    var user = getCookie("user");
+    var token = getCookie("token");
+    var url = urlBase + "/tasks?user=" + user;
+    $.ajax({
+        type: "GET",
+        url: url,
+        headers: {
+            'token': token
+        },
+        success: function(response) {
+            if (response.statusCode == 200) {
+                populateTasks(response.body.tasks);
+            } else if (response.statusCode == 201) {
+                logout();
+            } else {
+                console.log("Something is messed up");
+                console.log(response.statusCode);
+            }
+        }
+    });
+}
+
+function populateTasks(tasks) {
+    var table = "<table border='1' class='tasksTable'><tr>";
+    table += "<th>Class</th>";
+    table += "<th>Task</th>";
+    table += "<th>Due Date</th>";
+    table += "<th>Status</th>";
+    table += "</tr>";
+    for (var i = 0; i < tasks.length; i++) {
+        var row = "<tr>";
+        row += "<td>" + tasks[i].class + "</td>";
+        row += "<td>" + tasks[i].task + "</td>";
+        var date = new Date(tasks[i].due);
+        row += "<td>" + date.getMonth() + "/" + date.getDate() + ", " + dayString(date.getDay()) + "</td>";
+        if (tasks[i].stat == "N") {
+            row += "<td>Not Done</td>";
+        } else {
+            row += "<td>Done</td>";
+        }
+        row += "</tr>";
+        table += row;
+    }
+    table += "</table>";
+    document.getElementById("tableWrapper").innerHTML = table;
+}
+
+function dayString(num) {
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    if (num < 0 || num > 6) {
+        return "Error";
+    }
+    return days[num];
 }
 
 function setCookie(user, name, color, class_value, token) {
@@ -57,4 +123,12 @@ function getCookie(cname) {
         }
     }
     return "";
+}
+
+function clearCookies() {
+    document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "color=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "classes=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
