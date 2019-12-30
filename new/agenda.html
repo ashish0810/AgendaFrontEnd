@@ -6,12 +6,29 @@
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
         <script type="text/javascript" src="assets/js/func.js"></script>
     </head>
-    <body onload="fillAgendaPage(); fillTasks();">
+    <body onload="fillAgendaPage(); updateTasks();">
         <div id="wrapper">
             <h1 id="title">Agenda</h1>
             <!-- User settings -->
             <!-- toggle view -->
             <div id="tableWrapper"></div>
+            <div id="addTaskWrapper">
+                <form id="addForm">
+                    <p class="addP">Class:</p>
+                    <select name="class" id="addFormClass">
+                        <option value="" disabled selected>Select a class</option>
+                    </select>
+
+                    <p class="addP">Task:</p>
+                    <input tpye="text" name="task" id="addFormTask" />
+
+                    <p class="addP">Due Date:</p>
+                    <input type="date" name="due" id="addFormDate" />
+
+                    <p></p>
+                    <input id="formSubmit" type="button" value="Add Task" onclick="addTask()" />
+                </form>
+            </div>
         </div>
     </body>
 </html>

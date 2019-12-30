@@ -39,11 +39,16 @@ function logout() {
 
 function fillAgendaPage() {
     var name = getCookie("name");
+    var classes = getCookie("classes").split(",");
     document.title = name + "'s Agenda";
     document.getElementById("title").innerHTML = name + "'s Agenda";
+    var classSelect = document.getElementById("addFormClass");
+    for (var i = 0; i < classes.length; i++) {
+        classSelect.innerHTML += "<option value='" + i + "'>" + classes[i] + "</option>";
+    }
 }
 
-function fillTasks() {
+function updateTasks() {
     var user = getCookie("user");
     var token = getCookie("token");
     var url = urlBase + "/tasks?user=" + user;
@@ -77,7 +82,7 @@ function populateTasks(tasks) {
         row += "<td>" + tasks[i].class + "</td>";
         row += "<td>" + tasks[i].task + "</td>";
         var date = new Date(tasks[i].due);
-        row += "<td>" + date.getMonth() + "/" + date.getDate() + ", " + dayString(date.getDay()) + "</td>";
+        row += "<td>" + (date.getMonth()+1) + "/" + date.getDate() + ", " + dayString(date.getDay()) + "</td>";
         if (tasks[i].stat == "N") {
             row += "<td><a onclick='finishTask(" + tasks[i].id + ")' href='javascript:void(0);'>Not Done</a></td>";
         } else {
@@ -106,7 +111,7 @@ function finishTask(id) {
         dataType: "json",
         success: function(response) {
             if (response.statusCode == 200) {
-                fillTasks();
+                updateTasks();
             } else if (response.statusCode == 201) {
                 logout();
             } else {
@@ -115,6 +120,41 @@ function finishTask(id) {
         }
     });
 }
+
+function addTask() {
+    var classin = document.getElementById("addFormClass").options[document.getElementById("addFormClass").selectedIndex].innerHTML;
+    var task = document.getElementById("addFormTask").value;
+    var date = document.getElementById("addFormDate").value;
+    var user = getCookie("user");
+    var token = getCookie("token");
+    var url = urlBase + "/tasks?user=" + user;
+    $.ajax({
+        type: "POST",
+        url: url,
+        headers: {
+            'token': token
+        },
+        data: {
+            'className': classin,
+            'task': task,
+            'dueDate': date
+        },
+        dataType: "json",
+        success: function(response) {
+            if (response.statusCode == 200) {
+                updateTasks();
+            } else if (response.statusCode == 201) {
+                logout();
+            } else {
+                console.log("Something is messed up");
+            }
+        }
+    });
+}
+
+
+
+// HELPERS
 
 function dayString(num) {
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
