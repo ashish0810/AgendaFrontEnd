@@ -60,7 +60,6 @@ function fillTasks() {
                 logout();
             } else {
                 console.log("Something is messed up");
-                console.log(response.statusCode);
             }
         }
     });
@@ -80,7 +79,7 @@ function populateTasks(tasks) {
         var date = new Date(tasks[i].due);
         row += "<td>" + date.getMonth() + "/" + date.getDate() + ", " + dayString(date.getDay()) + "</td>";
         if (tasks[i].stat == "N") {
-            row += "<td>Not Done</td>";
+            row += "<td><a onclick='finishTask(" + tasks[i].id + ")' href='javascript:void(0);'>Not Done</a></td>";
         } else {
             row += "<td>Done</td>";
         }
@@ -89,6 +88,32 @@ function populateTasks(tasks) {
     }
     table += "</table>";
     document.getElementById("tableWrapper").innerHTML = table;
+}
+
+function finishTask(id) {
+    var user = getCookie("user");
+    var token = getCookie("token");
+    var url = urlBase + "/tasks?user=" + user;
+    $.ajax({
+        type: "PUT",
+        url: url,
+        headers: {
+            'token': token
+        },
+        data: {
+            'taskId': id
+        },
+        dataType: "json",
+        success: function(response) {
+            if (response.statusCode == 200) {
+                fillTasks();
+            } else if (response.statusCode == 201) {
+                logout();
+            } else {
+                console.log("Something is messed up");
+            }
+        }
+    });
 }
 
 function dayString(num) {
