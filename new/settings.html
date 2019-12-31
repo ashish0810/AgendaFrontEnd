@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>User Settings</title>
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script type="text/javascript" src="assets/js/func.js"></script>
+    </head>
+    <body onload="fillSettingsPage()">
+        <div id="wrapper">
+            <h1 id="title">Edit Settings</h1>
+            <div id="settingsWrapper">
+                <form id="settingsForm">
+                    <p class="settingsP">Name:</p>
+                    <input type="text" name="name" id="settingsFormName" />
+
+                    <p class="settingsP">Username: (Cannot be changed)</p>
+                    <input type="text" name="user" id="settingsFormUser" disabled />
+
+                    <p class="settingsP">Password:</p>
+                    <input type="password" name="name" id="settingsFormPass" placeholder="Leave blank to remain unchanged" />
+
+                    <p class="settingsP">Color:</p>
+                    <input type="color" name="color" id="settingsFormColor" />
+
+                    <p class="settingsP">Classes:</p>
+                    <textarea name="classes" id="settingsFormClasses" placeholder="Enter your classes here, separated by commas 'Class 1, Class 2, Class 3'" style="width: 250px; height: 100px;"></textarea>
+
+                    <p></p>
+                    <input id="formSubmit" type="button" value="Save Settings" onclick="changeSettings()" />
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
