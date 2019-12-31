@@ -37,9 +37,65 @@ function logout() {
     document.location.href = "index.html";
 }
 
+function register() {
+    var name = document.getElementById("regFormName").value;
+    var user = document.getElementById("regFormUser").value;
+    var pass = document.getElementById("regFormPass").value;
+    var color = document.getElementById("regFormColor").value;
+    var classes = document.getElementById("regFormClasses").value;
+    var errorBox = document.getElementById("errorMessage");
+    errorBox.innerHTML = "";
+    if (name.length < 4 || name.length > 20) {
+        errorBox.innerHTML += "Name must be 4 to 20 characters<br />";
+    }
+    if (user.length < 4 || user.length > 20) {
+        errorBox.innerHTML += "Username must be 4 to 20 characters<br />";
+    }
+    if (pass.length < 4 || pass.length > 20) {
+        errorBox.innerHTML += "Password must be 4 to 20 characters<br />";
+    }
+    if (classes.length == 0) {
+        errorBox.innerHTML += "Must add some classes<br />";
+    }
+    if (errorBox.innerHTML != "") {
+        console.log("Some errors, not calling registration api");
+        return;
+    }
+    console.log("Calling registration api");
+    var url = urlBase + "/login/reg";
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            'name': name,
+            'user': user,
+            'pass': pass,
+            'color': color,
+            'classes': classes
+        },
+        dataType: "json",
+        success: function(response) {
+            console.log(response);
+            if (response.statusCode == 200) {
+                setCookie(response.body.user, response.body.name, response.body.color, response.body.class_value, response.body.token);
+                document.location.href = "agenda.html";
+            } else if (response.statusCode == 201) {
+                errorBox.innerHTML = "Something went wrong, the agenda service might be down or inaccessible";
+            }
+        }
+    });
+}
+
 function fillAgendaPage() {
+    var user = getCookie("user");
     var name = getCookie("name");
-    var classes = getCookie("classes").split(",");
+    var color = getCookie("color");
+    var class_value = getCookie("classes");
+    var token = getCookie("token");
+    if (user == "" || name == "" || color == "" || token == "") {
+        logout();
+    }
+    var classes = class_value.split(",");
     document.title = name + "'s Agenda";
     document.getElementById("title").innerHTML = name + "'s Agenda";
     var classSelect = document.getElementById("addFormClass");

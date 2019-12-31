@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Agenda Registration</title>
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script type="text/javascript" src="assets/js/func.js"></script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <h1 id="title">Agenda Registration</h1>
+            <p id="errorMessage"></p>
+            <div id="regWrapper">
+                <form id="regForm">
+                    <p class="regP">Name:</p>
+                    <input type="text" name="name" id="regFormName" />
+
+                    <p class="regP">Username:</p>
+                    <input type="text" name="user" id="regFormUser" />
+
+                    <p class="regP">Password:</p>
+                    <input type="password" name="name" id="regFormPass" />
+
+                    <p class="regP">Color:</p>
+                    <input type="color" name="color" id="regFormColor" />
+
+                    <p class="regP">Classes:</p>
+                    <textarea name="classes" id="regFormClasses" placeholder="Enter your classes here, separated by commas 'Class 1, Class 2, Class 3'" style="width: 250px; height: 100px;"></textarea>
+
+                    <p></p>
+                    <input id="formSubmit" type="button" value="Register" onclick="register()" />
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
