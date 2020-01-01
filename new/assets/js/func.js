@@ -88,6 +88,87 @@ function register() {
     });
 }
 
+function changeSettings() {
+    var name = document.getElementById("settingsFormName").value;
+    var pass = document.getElementById("settingsFormPass").value;
+    var color = document.getElementById("settingsFormColor").value;
+    var classes = document.getElementById("settingsFormClasses").value;
+    var user = getCookie("user");
+    var token = getCookie("token");
+    var url = urlBase + "/login/update";
+    if (pass == "") {
+        $.ajax({
+            type: "POST",
+            url: url,
+            headers: {
+                'token': token
+            },
+            data: {
+                'user': user,
+                'name': name,
+                'color': color,
+                'classes': classes
+            },
+            dataType: "json",
+            success: updateCallback
+        });
+    } else {
+        $.ajax({
+            type: "POST",
+            url: url,
+            headers: {
+                'token': token
+            },
+            data: {
+                'user': user,
+                'name': name,
+                'color': color,
+                'classes': classes,
+                'pass': pass
+            },
+            dataType: "json",
+            success: updateCallback
+        });
+    }
+}
+
+function updateCallback(response) {
+    if (response.statusCode == 200) {
+        setCookie(response.body.user, response.body.name, response.body.color, response.body.class_value, response.body.token);
+        document.location.href = "agenda.html";
+    } else if (response.statusCode == 201) {
+        logout();
+    } else {
+        console.log("Something is messed up");
+    }
+}
+
+function deleteUser() {
+    var user = getCookie("user");
+    var token = getCookie("token");
+    var url = urlBase + '/login';
+    $.ajax({
+        type: "DELETE",
+        url: url,
+        headers: {
+            'token': token,
+        },
+        data: {
+            'user': user,
+        },
+        dataType: "json",
+        success: function(response) {
+            if (response.statusCode == 200) {
+                logout();
+            } else if (response.statusCode == 201) {
+                logout();
+            } else {
+                console.log("Something is messed up");
+            }
+        }
+    });
+}
+
 function fillAgendaPage() {
     var user = getCookie("user");
     var name = getCookie("name");
@@ -219,61 +300,6 @@ function fillSettingsPage() {
     document.getElementById("settingsFormUser").value = user;
     document.getElementById("settingsFormColor").value = color;
     document.getElementById("settingsFormClasses").value = classes;
-}
-
-function changeSettings() {
-    var name = document.getElementById("settingsFormName").value;
-    var pass = document.getElementById("settingsFormPass").value;
-    var color = document.getElementById("settingsFormColor").value;
-    var classes = document.getElementById("settingsFormClasses").value;
-    var user = getCookie("user");
-    var token = getCookie("token");
-    var url = urlBase + "/login/update";
-    if (pass == "") {
-        $.ajax({
-            type: "POST",
-            url: url,
-            headers: {
-                'token': token
-            },
-            data: {
-                'user': user,
-                'name': name,
-                'color': color,
-                'classes': classes
-            },
-            dataType: "json",
-            success: updateCallback
-        });
-    } else {
-        $.ajax({
-            type: "POST",
-            url: url,
-            headers: {
-                'token': token
-            },
-            data: {
-                'user': user,
-                'name': name,
-                'color': color,
-                'classes': classes,
-                'pass': pass
-            },
-            dataType: "json",
-            success: updateCallback
-        });
-    }
-}
-
-function updateCallback(response) {
-    if (response.statusCode == 200) {
-        setCookie(response.body.user, response.body.name, response.body.color, response.body.class_value, response.body.token);
-        document.location.href = "agenda.html";
-    } else if (response.statusCode == 201) {
-        logout();
-    } else {
-        console.log("Something is messed up");
-    }
 }
 
 
