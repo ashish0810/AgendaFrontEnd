@@ -5,23 +5,71 @@
         <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
         <script type="text/javascript" src="assets/js/func.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     </head>
     <body>
-        <div id="wrapper">
-            <h1 id="title">Agenda Login</h1>
-            <p id="errorMessage"></p>
-            <div id="loginWrapper">
-				<form id="loginForm">
-					<p class="loginP">Username:</p>
-                    <input type="text" name="user" id="loginFormUser" />
-                    
-					<p class="loginP">Password:</p>
-					<input type="password" name="pass" id="loginFormPass" /><br /><br />
-                    
-                    <input id="formSubmit" type="button" value="Login" onclick="login()" />
-				</form><br/>
-				<span><a href="register.html">Don't have an account yet? Register here!</a></span>
-			</div>
+
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Agenda</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <form class="navbar-form navbar-right">
+                        <div class="form-group">
+                            <input type="text" placeholder="Email" class="form-control" id="loginFormUser">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Password" class="form-control" id="loginFormPass">
+                        </div>
+                        <button type="submit" class="btn btn-success" onclick="login()">Sign in</button>
+                    </form>
+                </div><!--/.navbar-collapse -->
+            </div>
+        </nav>
+
+        <!-- Main jumbotron for a primary marketing message or call to action -->
+        <div class="jumbotron">
+            <div class="container">
+                <h1>Agenda (Needs better name)</h1>
+                <p>A simple, easy to use agenda, perfect for managing your homework and tasks.</p>
+                <p id="errorMessage"></p>
+                <p><a class="btn btn-primary btn-lg" href="register.html" role="button">Sign up today &raquo;</a></p>
+            </div>
         </div>
+
+        <div class="container">
+            <!-- Example row of columns -->
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>Simple</h2>
+                    <p>Some description here.</p>
+                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+                </div>
+                <div class="col-md-4">
+                    <h2>Clean</h2>
+                    <p>Some description here.</p>
+                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+                </div>
+                <div class="col-md-4">
+                    <h2>Secure</h2>
+                    <p>Some description here.</p>
+                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+                </div>
+            </div>
+      
+            <hr>
+      
+            <footer>
+              <p>&copy; 2020 Ashish Bachavala</p>
+            </footer>
+          </div> <!-- /container -->
+
     </body>
 </html>
