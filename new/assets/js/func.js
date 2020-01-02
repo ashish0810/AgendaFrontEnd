@@ -3,8 +3,8 @@ const urlBase = "http://localhost:3000";
 // LOGIN/USER STUFF
 
 function login() {
-    var user = document.getElementById("loginFormUser").value;
-    var pass = document.getElementById("loginFormPass").value;
+    var user = document.getElementById("login-user").value;
+    var pass = document.getElementById("login-pass").value;
     var errorBox = document.getElementById("errorMessage");
     errorBox.innerHTML = "";
     var url = urlBase + "/login"
@@ -40,12 +40,12 @@ function logout() {
 }
 
 function register() {
-    var name = document.getElementById("regFormName").value;
-    var user = document.getElementById("regFormUser").value;
-    var pass = document.getElementById("regFormPass").value;
-    var color = document.getElementById("regFormColor").value;
-    var classes = document.getElementById("regFormClasses").value;
-    var errorBox = document.getElementById("errorMessage");
+    var name = document.getElementById("register-name").value;
+    var user = document.getElementById("register-user").value;
+    var pass = document.getElementById("register-pass").value;
+    var color = document.getElementById("register-color").value;
+    var classes = document.getElementById("register-classes").value;
+    var errorBox = document.getElementById("register-error-box");
     errorBox.innerHTML = "";
     if (name.length < 4 || name.length > 20) {
         errorBox.innerHTML += "Name must be 4 to 20 characters<br />";
