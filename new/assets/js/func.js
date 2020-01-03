@@ -93,12 +93,31 @@ function register() {
 }
 
 function changeSettings() {
-    var name = document.getElementById("settingsFormName").value;
-    var pass = document.getElementById("settingsFormPass").value;
-    var color = document.getElementById("settingsFormColor").value;
-    var classes = document.getElementById("settingsFormClasses").value;
+    var name = document.getElementById("settings-name").value;
+    var pass = document.getElementById("settings-pass").value;
+    var passConf = document.getElementById("settings-pass-conf").value;
+    var color = document.getElementById("settings-color").value;
+    var classes = document.getElementById("settings-classes").value;
     var user = getCookie("user");
     var token = getCookie("token");
+    var errorBox = document.getElementById("settings-error-box");
+    errorBox.innerHTML = "";
+    if (name.length < 4 || name.length > 20) {
+        errorBox.innerHTML += "<div class='alert alert-danger' role='alert'>Name must be 4 to 20 characters</div>";
+    }
+    if (pass.length != 0 && (pass.length < 4 || pass.length > 20)) {
+        errorBox.innerHTML += "<div class='alert alert-danger' role='alert'>Password must be 4 to 20 characters</div>";
+    }
+    if (pass != passConf) {
+        errorBox.innerHTML += "<div class='alert alert-danger' role='alert'>Passwords must match</div>";
+    }
+    if (classes.length == 0) {
+        errorBox.innerHTML += "<div class='alert alert-danger' role='alert'>Must add some classes</div>";
+    }
+    if (errorBox.innerHTML != "") {
+        console.log("Some errors, not calling registration api");
+        return;
+    }
     var url = urlBase + "/login/update";
     if (pass == "") {
         $.ajax({
@@ -189,6 +208,11 @@ function fillAgendaPage() {
     for (var i = 0; i < classes.length; i++) {
         classSelect.innerHTML += "<option value='" + i + "'>" + classes[i] + "</option>";
     }
+
+    document.getElementById("settings-name").value = name;
+    document.getElementById("settings-user").value = user;
+    document.getElementById("settings-color").value = color;
+    document.getElementById("settings-classes").value = class_value;
 }
 
 function updateTasks() {
@@ -244,10 +268,10 @@ function populateTasks(tasks) {
         allTasks += currTask;
     }
     document.getElementById("tableWrapper").innerHTML = allTasks;
-    prepModal();
+    prepTaskModal();
 }
 
-function prepModal() {
+function prepTaskModal() {
     $('#taskModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
         var id = button.data('task'); // Extract info from data-* attributes

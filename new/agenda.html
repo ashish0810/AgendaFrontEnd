@@ -22,7 +22,7 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="settings.html">Settings</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#settingsModal">Settings</a></li>
                         <li><a href="javascript:void(0)" onclick="logout()">Logout</a></li>
                     </ul>
                 </div><!--/.navbar-collapse -->
@@ -60,6 +60,12 @@
                 </div>
             </div>
         </div>
+
+        <footer class="footer">
+            <div class="container">
+                <p class="text-muted">&copy; 2020 Ashish Bachavala</p>
+            </div>
+        </footer>
 
         <div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel">
             <div class="modal-dialog" role="document">
@@ -99,6 +105,70 @@
                         <button type="button" class="btn btn-primary" onclick="markIncomplete()" data-dismiss="modal">Mark Incomplete</button>
                         <button type="button" class="btn btn-primary" onclick="markComplete()" data-dismiss="modal">Mark Complete</button>
                         <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" disabled>Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="settingsModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="settingsModalLabel">Edit user settings</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="settings-error-box"></p>
+                        <form>
+                            <div class="form-group">
+                                <label for="settings-name" class="control-label">Name:</label>
+                                <input type="text" class="form-control" id="settings-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="settings-user" class="control-label">Username: (Cannot be changed)</label>
+                                <input type="text" class="form-control" id="settings-user" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="settings-pass" class="control-label">Password:</label>
+                                <input type="password" class="form-control" id="settings-pass" placeholder="Leave blank to remain unchanged">
+                            </div>
+                            <div class="form-group">
+                                <label for="settings-pass-conf" class="col-form-label">Confirm Password:</label>
+                                <input type="password" class="form-control" id="settings-pass-conf" placeholder="Leave blank to remain unchanged">
+                            </div>
+                            <div class="form-group">
+                                <label for="settings-color" class="control-label">Color:</label>
+                                <input type="color" class="form-control" id="settings-color">
+                            </div>
+                            <div class="form-group">
+                                <label for="settings-classes" class="control-label">Classes:</label>
+                                <textarea class="form-control" id="settings-classes"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#confDeleteUserModal">Delete User</button>
+                        <button type="button" class="btn btn-primary" onclick="changeSettings()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="confDeleteUserModal" tabindex="-1" role="dialog" aria-labelledby="confDeleteUserModalLabel">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="confDeleteUserModalLabel">Confirm delete user</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure?</p>
+                        <p>Once you delete your account, this action cannot be undone...</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#settingsModal">No, keep account</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteUser()">Yes, delete account</button>
                     </div>
                 </div>
             </div>
