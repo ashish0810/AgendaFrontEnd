@@ -199,7 +199,7 @@ function updateTasks() {
         },
         success: function(response) {
             if (response.statusCode == 200) {
-                window.tasks = tasks;
+                window.tasks = response.body.tasks;
                 populateTasks(response.body.tasks);
                 window.showAllTaskState = false;
                 document.getElementById("view-task-label").innerHTML = "View all tasks";
