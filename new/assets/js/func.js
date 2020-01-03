@@ -115,7 +115,7 @@ function changeSettings() {
         errorBox.innerHTML += "<div class='alert alert-danger' role='alert'>Must add some classes</div>";
     }
     if (errorBox.innerHTML != "") {
-        console.log("Some errors, not calling registration api");
+        console.log("Some errors, not calling settings api");
         return;
     }
     var url = urlBase + "/login/update";
@@ -204,9 +204,11 @@ function fillAgendaPage() {
     var classes = class_value.split(",");
     document.title = name + "'s Agenda";
     document.getElementById("title").innerHTML = name + "'s Agenda";
-    var classSelect = document.getElementById("add-class");
+    var addClassSelect = document.getElementById("add-class");
+    var taskClassSelect = document.getElementById("task-class");
     for (var i = 0; i < classes.length; i++) {
-        classSelect.innerHTML += "<option value='" + i + "'>" + classes[i] + "</option>";
+        addClassSelect.innerHTML += "<option value='" + i + "'>" + classes[i] + "</option>";
+        taskClassSelect.innerHTML += "<option value='" + i + "'>" + classes[i] + "</option>";
     }
 
     document.getElementById("settings-name").value = name;
@@ -284,7 +286,7 @@ function prepTaskModal() {
         var modal = $(this);
         modal.find('.modal-body #task-id').val(id);
         modal.find('.modal-body #task-name').val(task.task);
-        modal.find('.modal-body #task-class').val(task.class);
+        modal.find('.modal-body #task-class').val(getClassIdx(task.class));
         modal.find('.modal-body #task-date').val(task.due.substring(0, 10));
         var progress = (task.stat == "D") ? 100 : 0;
         modal.find('.modal-body #task-progress').val(progress);
@@ -296,6 +298,16 @@ function prepTaskModal() {
             output.innerHTML = this.value;
         }
     });
+}
+
+function getClassIdx(className) {
+    var classes = getCookie("classes").split(",");
+    for (var i = 0; i < classes.length; i++) {
+        if (classes[i] == className) {
+            return i;
+        }
+    }
+    return 0;
 }
 
 function markComplete() {
@@ -360,6 +372,21 @@ function addTask() {
     var date = document.getElementById("add-date").value;
     var user = getCookie("user");
     var token = getCookie("token");
+    var msgBox = document.getElementById("add-task-msg-box");
+    msgBox.innerHTML = "";
+    if (classin == "Select a class") {
+        msgBox.innerHTML += "<div class='alert alert-danger' role='alert'>Please select a class</div>";
+    }
+    if (task.length == 0) {
+        msgBox.innerHTML += "<div class='alert alert-danger' role='alert'>Please add a task name</div>";
+    }
+    if (date == "") {
+        msgBox.innerHTML += "<div class='alert alert-danger' role='alert'>Please choose a due date</div>";
+    }
+    if (msgBox.innerHTML != "") {
+        console.log("Some errors, not calling addTask api");
+        return;
+    }
     var url = urlBase + "/tasks?user=" + user;
     $.ajax({
         type: "POST",
@@ -393,6 +420,50 @@ function showAddTaskSuccessMsg() {
         document.getElementById("add-task-msg-box").innerHTML = "";
     }, 5000);
 }
+
+function editTask() {
+    var id = document.getElementById("task-id").value;
+    var classin = document.getElementById("task-class").options[document.getElementById("task-class").selectedIndex].innerHTML;
+    var task = document.getElementById("task-name").value;
+    var date = document.getElementById("task-date").value;
+    var progress = document.getElementById("task-progress").value;
+    var user = getCookie("user");
+    var token = getCookie("token");
+    var url = urlBase + "/tasks/update?user=" + user;
+    $.ajax({
+        type: "POST",
+        url: url,
+        headers: {
+            'token': token
+        },
+        data: {
+            'id': id,
+            'className': classin,
+            'task': task,
+            'dueDate': date,
+            'progress': progress
+        },
+        dataType: "json",
+        success: function(response) {
+            if (response.statusCode == 200) {
+                showEditTaskSuccessMsg()
+                updateTasks();
+            } else if (response.statusCode == 201) {
+                logout();
+            } else {
+                console.log("Something is messed up");
+            }
+        }
+    });
+}
+
+function showEditTaskSuccessMsg() {
+    document.getElementById("add-task-msg-box").innerHTML = "<div class='alert alert-success' role='alert'><strong>Successfully edited task!</strong></div>";
+    setTimeout(() => {
+        document.getElementById("add-task-msg-box").innerHTML = "";
+    }, 5000);
+}
+
 
 function fillSettingsPage() {
     var name = getCookie("name");

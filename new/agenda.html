@@ -79,19 +79,19 @@
                             <input type="hidden" id="task-id">
                             <div class="form-group">
                                 <label for="task-name" class="control-label">Task:</label>
-                                <input type="text" class="form-control" id="task-name" disabled>
+                                <input type="text" class="form-control" id="task-name">
                             </div>
                             <div class="form-group">
                                 <label for="task-class" class="control-label">Class:</label>
-                                <input type="text" class="form-control" id="task-class" disabled>
+                                <select class="form-control" id="task-class"></select>
                             </div>
                             <div class="form-group">
                                 <label for="task-date" class="control-label">Date:</label>
-                                <input type="date" class="form-control" id="task-date" disabled>
+                                <input type="date" class="form-control" id="task-date">
                             </div>
                             <div class="form-group">
                                 <label for="task-progress" class="control-label">Progress:</label>    <span id="task-progress-label">0</span>
-                                <input type="range" class="slider-color" min="0" max="100" step="5" id="task-progress" disabled>
+                                <input type="range" class="slider-color" min="0" max="100" step="5" id="task-progress">
                             </div>
                             <!-- <div class="form-group">
                                 <label for="task-description" class="control-label">Description:</label>
@@ -104,7 +104,7 @@
                         <button type="button" class="btn btn-danger" onclick="deleteTask()" data-dismiss="modal" data-toggle="tooltip" data-placement="bottom" disabled>Delete Task</button>
                         <button type="button" class="btn btn-primary" onclick="markIncomplete()" data-dismiss="modal">Mark Incomplete</button>
                         <button type="button" class="btn btn-primary" onclick="markComplete()" data-dismiss="modal">Mark Complete</button>
-                        <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" disabled>Save</button>
+                        <button type="button" class="btn btn-primary" onclick="editTask()" data-dismiss="modal">Save</button>
                     </div>
                 </div>
             </div>
