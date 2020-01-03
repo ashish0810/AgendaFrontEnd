@@ -5,7 +5,7 @@ const urlBase = "http://localhost:3000";
 function login() {
     var user = document.getElementById("login-user").value;
     var pass = document.getElementById("login-pass").value;
-    var errorBox = document.getElementById("errorMessage");
+    var errorBox = document.getElementById("login-error-box");
     errorBox.innerHTML = "";
     var url = urlBase + "/login"
     $.ajax({
@@ -25,7 +25,7 @@ function login() {
                 document.location.href = "agenda.html";
             } else if (response.statusCode == 201) {
                 console.log("Invalid login");
-                errorBox.innerHTML = "Username/Password is Incorrect";
+                errorBox.innerHTML = "<div class='alert alert-danger' role='alert'><strong>Usernmame/Password incorrect</strong></div>";
             } else {
                 console.log("Something is messed up");
                 errorBox.innerHTML = "Something went wrong, the agenda service might be down or inaccessible";
@@ -43,21 +43,25 @@ function register() {
     var name = document.getElementById("register-name").value;
     var user = document.getElementById("register-user").value;
     var pass = document.getElementById("register-pass").value;
+    var passConf = document.getElementById("register-pass-conf").value;
     var color = document.getElementById("register-color").value;
     var classes = document.getElementById("register-classes").value;
     var errorBox = document.getElementById("register-error-box");
     errorBox.innerHTML = "";
     if (name.length < 4 || name.length > 20) {
-        errorBox.innerHTML += "Name must be 4 to 20 characters<br />";
+        errorBox.innerHTML += "<div class='alert alert-danger' role='alert'>Name must be 4 to 20 characters</div>";
     }
     if (user.length < 4 || user.length > 20) {
-        errorBox.innerHTML += "Username must be 4 to 20 characters<br />";
+        errorBox.innerHTML += "<div class='alert alert-danger' role='alert'>Username must be 4 to 20 characters</div>";
     }
     if (pass.length < 4 || pass.length > 20) {
-        errorBox.innerHTML += "Password must be 4 to 20 characters<br />";
+        errorBox.innerHTML += "<div class='alert alert-danger' role='alert'>Password must be 4 to 20 characters</div>";
+    }
+    if (pass != passConf) {
+        errorBox.innerHTML += "<div class='alert alert-danger' role='alert'>Passwords must match</div>";
     }
     if (classes.length == 0) {
-        errorBox.innerHTML += "Must add some classes<br />";
+        errorBox.innerHTML += "<div class='alert alert-danger' role='alert'>Must add some classes</div>";
     }
     if (errorBox.innerHTML != "") {
         console.log("Some errors, not calling registration api");

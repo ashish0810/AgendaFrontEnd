@@ -4,6 +4,19 @@ body {
     padding-bottom: 20px;
 }
 
+#login-error-box {
+    display: inline;
+}
+
+#login-error-box .alert{
+    /* position: absolute;
+    float: right;
+    margin-top: 7px; */
+    display: inline;
+    padding: 7px;
+    margin-right: 10px;
+}
+
 #register-error-box {
     color: red;
 }
