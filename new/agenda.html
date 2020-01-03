@@ -5,30 +5,107 @@
         <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
         <script type="text/javascript" src="assets/js/func.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
     </head>
     <body onload="fillAgendaPage(); updateTasks();">
-        <div id="wrapper">
-            <h1 id="title">Agenda</h1>
-            <span><a href="settings.html" id="linkSettings">Edit User Settings</a></span>
-            <!-- toggle view -->
-            <div id="tableWrapper"></div>
-            <div id="addTaskWrapper">
-                <form id="addForm">
-                    <p class="addP">Class:</p>
-                    <select name="class" id="addFormClass">
-                        <option value="" disabled selected>Select a class</option>
-                    </select>
 
-                    <p class="addP">Task:</p>
-                    <input tpye="text" name="task" id="addFormTask" />
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#" id="title">Agenda</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="settings.html">Settings</a></li>
+                        <li><a href="javascript:void(0)" onclick="logout()">Logout</a></li>
+                    </ul>
+                </div><!--/.navbar-collapse -->
+            </div>
+        </nav>
 
-                    <p class="addP">Due Date:</p>
-                    <input type="date" name="due" id="addFormDate" />
-
-                    <p></p>
-                    <input id="formSubmit" type="button" value="Add Task" onclick="addTask()" />
-                </form>
+        <div class="container" role="main">
+            <div class="row">
+                <div class="col-md-8">
+                    <h1>Tasks  <a class="small view-task-toggle" href="javascript:void(0)" onclick="viewTaskToggle()" id="view-task-label">View all tasks</a></h1>
+                    <div id="tableWrapper"></div>
+                    <div class="list-group"></div>
+                </div>
+                <div class="col-md-4">
+                    <h1>Add Task</h1>
+                    <form id="add-task-form">
+                        <div class="form-group">
+                            <label for="add-class" class="control-label">Class:</label>
+                            <select class="form-control" id="add-class">
+                                <option value="" disabled selected>Select a class</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="add-task" class="control-label">Task:</label>
+                            <input type="text" class="form-control" id="add-task">
+                        </div>
+                        <div class="form-group">
+                            <label for="add-date" class="control-label">Due Date:</label>
+                            <input type="date" class="form-control" id="add-date">
+                        </div>
+                        <button type="button" class="btn btn-default" onclick="addTask()">Add Task</button>
+                    </form>
+                    <br><br>
+                    <div id="add-task-msg-box"></div>
+                </div>
             </div>
         </div>
+
+        <div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="taskModalLabel">Edit task</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <input type="hidden" id="task-id">
+                            <div class="form-group">
+                                <label for="task-name" class="control-label">Task:</label>
+                                <input type="text" class="form-control" id="task-name" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="task-class" class="control-label">Class:</label>
+                                <input type="text" class="form-control" id="task-class" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="task-date" class="control-label">Date:</label>
+                                <input type="date" class="form-control" id="task-date" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="task-progress" class="control-label">Progress:</label>    <span id="task-progress-label">0</span>
+                                <input type="range" class="slider-color" min="0" max="100" step="5" id="task-progress" disabled>
+                            </div>
+                            <!-- <div class="form-group">
+                                <label for="task-description" class="control-label">Description:</label>
+                                <textarea class="form-control" id="task-description" disabled></textarea>
+                            </div> -->
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteTask()" data-dismiss="modal" data-toggle="tooltip" data-placement="bottom" disabled>Delete Task</button>
+                        <button type="button" class="btn btn-primary" onclick="markIncomplete()" data-dismiss="modal">Mark Incomplete</button>
+                        <button type="button" class="btn btn-primary" onclick="markComplete()" data-dismiss="modal">Mark Complete</button>
+                        <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" disabled>Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+
     </body>
 </html>

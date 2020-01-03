@@ -181,7 +181,7 @@ function fillAgendaPage() {
     var classes = class_value.split(",");
     document.title = name + "'s Agenda";
     document.getElementById("title").innerHTML = name + "'s Agenda";
-    var classSelect = document.getElementById("addFormClass");
+    var classSelect = document.getElementById("add-class");
     for (var i = 0; i < classes.length; i++) {
         classSelect.innerHTML += "<option value='" + i + "'>" + classes[i] + "</option>";
     }
@@ -199,7 +199,14 @@ function updateTasks() {
         },
         success: function(response) {
             if (response.statusCode == 200) {
+                window.tasks = tasks;
                 populateTasks(response.body.tasks);
+                window.showAllTaskState = false;
+                document.getElementById("view-task-label").innerHTML = "View all tasks";
+                var completeTasks = document.getElementsByClassName("task-complete");
+                for (var i = 0; i < completeTasks.length; i++) {
+                    completeTasks[i].style.display = "none";
+                }
             } else if (response.statusCode == 201) {
                 logout();
             } else {
@@ -209,32 +216,62 @@ function updateTasks() {
     });
 }
 
-function populateTasks(tasks) {
-    var table = "<table border='1' class='tasksTable'><tr>";
-    table += "<th>Class</th>";
-    table += "<th>Task</th>";
-    table += "<th>Due Date</th>";
-    table += "<th>Status</th>";
-    table += "</tr>";
+function getTaskById(id) {
+    var tasks = window.tasks;
     for (var i = 0; i < tasks.length; i++) {
-        var row = "<tr>";
-        row += "<td>" + tasks[i].class + "</td>";
-        row += "<td>" + tasks[i].task + "</td>";
-        var date = new Date(tasks[i].due);
-        row += "<td>" + (date.getMonth()+1) + "/" + date.getDate() + ", " + dayString(date.getDay()) + "</td>";
-        if (tasks[i].stat == "N") {
-            row += "<td><a onclick='finishTask(" + tasks[i].id + ")' href='javascript:void(0);'>Not Done</a></td>";
-        } else {
-            row += "<td>Done</td>";
+        if (tasks[i].id == id) {
+            return tasks[i];
         }
-        row += "</tr>";
-        table += row;
     }
-    table += "</table>";
-    document.getElementById("tableWrapper").innerHTML = table;
+    return null;
 }
 
-function finishTask(id) {
+function populateTasks(tasks) {
+    var allTasks = "";
+    for (var i = 0; i < tasks.length; i++) {
+        var complete = tasks[i].stat == "D";
+        var currTask = "<a class='list-group-item " + (complete ? "task-complete" : "task-incomplete") + "' data-toggle='modal' data-target='#taskModal' data-task='" + tasks[i].id + "'>";
+        currTask += "<h4 class='list-group-item-heading'>" + tasks[i].task + "  <small>" + tasks[i].class + "</small></h4>";
+        var date = new Date(tasks[i].due);
+        currTask += "<p class='list-group-item-text'>" + (date.getMonth()+1) + "/" + date.getDate() + ", " + dayString(date.getDay()) + "<br>";
+        currTask += complete ? "Done" : "Not Done";
+        currTask += "</p>";
+        currTask += "</a>";
+        allTasks += currTask;
+    }
+    document.getElementById("tableWrapper").innerHTML = allTasks;
+    prepModal();
+}
+
+function prepModal() {
+    $('#taskModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var id = button.data('task'); // Extract info from data-* attributes
+
+        var task = getTaskById(id);
+        if (task == null) {
+            return;
+        }
+        
+        var modal = $(this);
+        modal.find('.modal-body #task-id').val(id);
+        modal.find('.modal-body #task-name').val(task.task);
+        modal.find('.modal-body #task-class').val(task.class);
+        modal.find('.modal-body #task-date').val(task.due.substring(0, 10));
+        var progress = (task.stat == "D") ? 100 : 0;
+        modal.find('.modal-body #task-progress').val(progress);
+
+        var slider = document.getElementById("task-progress");
+        var output = document.getElementById("task-progress-label");
+        output.innerHTML = slider.value;
+        slider.oninput = function() {
+            output.innerHTML = this.value;
+        }
+    });
+}
+
+function markComplete() {
+    var id = document.getElementById("task-id").value;
     var user = getCookie("user");
     var token = getCookie("token");
     var url = urlBase + "/tasks?user=" + user;
@@ -245,7 +282,36 @@ function finishTask(id) {
             'token': token
         },
         data: {
-            'taskId': id
+            'taskId': id,
+            'progress': 100,
+        },
+        dataType: "json",
+        success: function(response) {
+            if (response.statusCode == 200) {
+                updateTasks();
+            } else if (response.statusCode == 201) {
+                logout();
+            } else {
+                console.log("Something is messed up");
+            }
+        }
+    });
+}
+
+function markIncomplete() {
+    var id = document.getElementById("task-id").value;
+    var user = getCookie("user");
+    var token = getCookie("token");
+    var url = urlBase + "/tasks?user=" + user;
+    $.ajax({
+        type: "PUT",
+        url: url,
+        headers: {
+            'token': token
+        },
+        data: {
+            'taskId': id,
+            'progress': 0,
         },
         dataType: "json",
         success: function(response) {
@@ -261,9 +327,9 @@ function finishTask(id) {
 }
 
 function addTask() {
-    var classin = document.getElementById("addFormClass").options[document.getElementById("addFormClass").selectedIndex].innerHTML;
-    var task = document.getElementById("addFormTask").value;
-    var date = document.getElementById("addFormDate").value;
+    var classin = document.getElementById("add-class").options[document.getElementById("add-class").selectedIndex].innerHTML;
+    var task = document.getElementById("add-task").value;
+    var date = document.getElementById("add-date").value;
     var user = getCookie("user");
     var token = getCookie("token");
     var url = urlBase + "/tasks?user=" + user;
@@ -281,7 +347,9 @@ function addTask() {
         dataType: "json",
         success: function(response) {
             if (response.statusCode == 200) {
+                document.getElementById("add-task-form").reset();
                 updateTasks();
+                showAddTaskSuccessMsg();
             } else if (response.statusCode == 201) {
                 logout();
             } else {
@@ -289,6 +357,13 @@ function addTask() {
             }
         }
     });
+}
+
+function showAddTaskSuccessMsg() {
+    document.getElementById("add-task-msg-box").innerHTML = "<div class='alert alert-success' role='alert'><strong>Successfully added task!</strong></div>";
+    setTimeout(() => {
+        document.getElementById("add-task-msg-box").innerHTML = "";
+    }, 5000);
 }
 
 function fillSettingsPage() {
@@ -300,6 +375,23 @@ function fillSettingsPage() {
     document.getElementById("settingsFormUser").value = user;
     document.getElementById("settingsFormColor").value = color;
     document.getElementById("settingsFormClasses").value = classes;
+}
+
+function viewTaskToggle() {
+    var completeTasks = document.getElementsByClassName("task-complete");
+    if (window.showAllTaskState) {
+        window.showAllTaskState = false;
+        document.getElementById("view-task-label").innerHTML = "View all tasks";
+        for (var i = 0; i < completeTasks.length; i++) {
+            completeTasks[i].style.display = "none";
+        }
+    } else {
+        window.showAllTaskState = true;
+        document.getElementById("view-task-label").innerHTML = "View incomplete tasks";
+        for (var i = 0; i < completeTasks.length; i++) {
+            completeTasks[i].style.display = "block";
+        }
+    }
 }
 
 
