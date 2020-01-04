@@ -464,6 +464,40 @@ function showEditTaskSuccessMsg() {
     }, 5000);
 }
 
+function deleteTask() {
+    var user = getCookie("user");
+    var token = getCookie("token");
+    var id = document.getElementById("task-id").value;
+    var url = urlBase + "/tasks?user=" + user;
+    $.ajax({
+        type: "DELETE",
+        url: url,
+        headers: {
+            'token': token
+        },
+        data: {
+            'id': id
+        },
+        dataType: "json",
+        success: function(response) {
+            if (response.statusCode == 200) {
+                showDeleteTaskSuccessMsg();
+                updateTasks();
+            } else if (response.statusCode == 201) {
+                logout();
+            } else {
+                console.log("Something is messed up");
+            }
+        }
+    });
+}
+
+function showDeleteTaskSuccessMsg() {
+    document.getElementById("add-task-msg-box").innerHTML = "<div class='alert alert-success' role='alert'><strong>Successfully deleted task!</strong></div>";
+    setTimeout(() => {
+        document.getElementById("add-task-msg-box").innerHTML = "";
+    }, 5000);
+}
 
 function fillSettingsPage() {
     var name = getCookie("name");

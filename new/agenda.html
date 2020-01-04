@@ -101,10 +101,29 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-danger" onclick="deleteTask()" data-dismiss="modal" data-toggle="tooltip" data-placement="bottom" disabled>Delete Task</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" data-toggle="modal" data-target="#confDeleteTaskModal">Delete Task</button>
                         <button type="button" class="btn btn-primary" onclick="markIncomplete()" data-dismiss="modal">Mark Incomplete</button>
                         <button type="button" class="btn btn-primary" onclick="markComplete()" data-dismiss="modal">Mark Complete</button>
                         <button type="button" class="btn btn-primary" onclick="editTask()" data-dismiss="modal">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="confDeleteTaskModal" tabindex="-1" role="dialog" aria-labelledby="confDeleteTaskModalLabel">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="confDeleteTaskModalLabel">Confirm delete task</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure?</p>
+                        <p>Once you delete a task, this action cannot be undone...</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#taskModal">No, keep task</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteTask()">Yes, delete task</button>
                     </div>
                 </div>
             </div>
