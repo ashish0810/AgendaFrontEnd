@@ -1,4 +1,4 @@
-const urlBase = "http://aa.ashishbach.com:3000";
+var urlBase = "https://ashishbach.com:8443"; // eventually need to change this port
 
 // LOGIN/USER STUFF
 
