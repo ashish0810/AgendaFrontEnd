@@ -24,11 +24,15 @@ body {
 .task-complete {
     border-left-color: green !important;
     border-left-width: medium !important;
-    /* display: none !important; */
 }
 
 .task-incomplete {
     border-left-color: red !important;
+    border-left-width: medium !important;
+}
+
+.task-inprogress {
+    border-left-color: orange !important;
     border-left-width: medium !important;
 }
 

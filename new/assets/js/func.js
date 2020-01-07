@@ -259,12 +259,19 @@ function getTaskById(id) {
 function populateTasks(tasks) {
     var allTasks = "";
     for (var i = 0; i < tasks.length; i++) {
-        var complete = tasks[i].stat == "D";
-        var currTask = "<a class='list-group-item " + (complete ? "task-complete" : "task-incomplete") + "' data-toggle='modal' data-target='#taskModal' data-task='" + tasks[i].id + "'>";
+        var stateClass;
+        if (tasks[i].progress == 100) {
+            stateClass = "task-complete";
+        } else if (tasks[i].progress == 0) {
+            stateClass = "task-incomplete";
+        } else {
+            stateClass = "task-inprogress";
+        }
+        var currTask = "<a class='list-group-item " + stateClass + "' data-toggle='modal' data-target='#taskModal' data-task='" + tasks[i].id + "'>";
         currTask += "<h4 class='list-group-item-heading'>" + tasks[i].task + "  <small>" + tasks[i].class + "</small></h4>";
         var date = new Date(tasks[i].due);
         currTask += "<p class='list-group-item-text'>" + (date.getMonth()+1) + "/" + date.getDate() + ", " + dayString(date.getDay()) + "<br>";
-        currTask += complete ? "Done" : "Not Done";
+        currTask += tasks[i].progress + "%";
         currTask += "</p>";
         currTask += "</a>";
         allTasks += currTask;
@@ -288,8 +295,7 @@ function prepTaskModal() {
         modal.find('.modal-body #task-name').val(task.task);
         modal.find('.modal-body #task-class').val(getClassIdx(task.class));
         modal.find('.modal-body #task-date').val(task.due.substring(0, 10));
-        var progress = (task.stat == "D") ? 100 : 0;
-        modal.find('.modal-body #task-progress').val(progress);
+        modal.find('.modal-body #task-progress').val(task.progress);
 
         var slider = document.getElementById("task-progress");
         var output = document.getElementById("task-progress-label");
