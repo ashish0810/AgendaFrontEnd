@@ -72,3 +72,25 @@ body {
     background: #4CAF50;
     cursor: pointer;
 }
+
+#class-list-holder {
+    margin-top: 0 !important;
+    line-height: 1.5em;
+}
+
+.class-list-item {
+    margin-right: 10px;
+}
+
+.class-list-close {
+    margin-left: 4px;
+}
+
+.class-list-close a {
+    text-decoration: none;
+    color: white;
+}
+
+.class-list-close a:hover {
+    color: white;
+}

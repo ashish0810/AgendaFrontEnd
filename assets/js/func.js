@@ -44,7 +44,7 @@ function register() {
     var user = document.getElementById("register-user").value;
     var pass = document.getElementById("register-pass").value;
     var passConf = document.getElementById("register-pass-conf").value;
-    var classes = document.getElementById("register-classes").value;
+    var classes = window.classInputList.join();
     var errorBox = document.getElementById("register-error-box");
     errorBox.innerHTML = "";
     if (name.length < 4 || name.length > 20) {
@@ -94,7 +94,7 @@ function changeSettings() {
     var name = document.getElementById("settings-name").value;
     var pass = document.getElementById("settings-pass").value;
     var passConf = document.getElementById("settings-pass-conf").value;
-    var classes = document.getElementById("settings-classes").value;
+    var classes = window.classInputList.join();
     var user = getCookie("user");
     var token = getCookie("token");
     var errorBox = document.getElementById("settings-error-box");
@@ -187,7 +187,12 @@ function deleteUser() {
     });
 }
 
+
+
+// TASK STUFF
+
 function fillAgendaPage() {
+    initListClass();
     var user = getCookie("user");
     var name = getCookie("name");
     var class_value = getCookie("classes");
@@ -203,11 +208,11 @@ function fillAgendaPage() {
     for (var i = 0; i < classes.length; i++) {
         addClassSelect.innerHTML += "<option value='" + i + "'>" + classes[i] + "</option>";
         taskClassSelect.innerHTML += "<option value='" + i + "'>" + classes[i] + "</option>";
+        addToClassList(classes[i]);
     }
 
     document.getElementById("settings-name").value = name;
     document.getElementById("settings-user").value = user;
-    document.getElementById("settings-classes").value = class_value;
 }
 
 function updateTasks() {
@@ -521,6 +526,55 @@ function viewTaskToggle() {
         for (var i = 0; i < completeTasks.length; i++) {
             completeTasks[i].style.display = "block";
         }
+    }
+}
+
+
+
+// CLASS FORM STUFF
+
+function initListClass() {
+    var box = document.getElementsByClassName('list-input')[0];
+    box.onkeyup = classTextHandler;
+    box.onblur = classTextHandler;
+    window.classInputList = [];
+}
+
+function classTextHandler() {
+    var box = document.getElementsByClassName('list-input')[0];
+    if (box.value.charAt(box.value.length - 1) == ',' || box.value.charAt(box.value.length - 1) == '\n') {
+        var className = box.value.substring(0, box.value.length - 1);
+        if (className.length > 0) {
+            addToClassList(className);
+        }
+        box.value = "";
+    }
+}
+
+function addToClassList(className) {
+    window.classInputList.push(className);
+    updateClassListDisplay();
+}
+
+function removeFromClassList(className) {
+    for (var i = 0; i < window.classInputList.length; i++) {
+        if (window.classInputList[i] == className) {
+            window.classInputList.splice(i, 1);
+        }
+    }
+    updateClassListDisplay();
+}
+
+function removeFromClassListIdx(classIdx) {
+    window.classInputList.splice(classIdx, 1);
+    updateClassListDisplay();
+}
+
+function updateClassListDisplay() {
+    var holder = document.getElementById('class-list-holder');
+    holder.innerHTML = "";
+    for (var i = 0; i < window.classInputList.length; i++) {
+        holder.innerHTML += "<span class='label label-default class-list-item'>" + window.classInputList[i] + "<span aria-hidden='true' class='class-list-close'><a href='javascript:void(0)' onclick='removeFromClassListIdx(" + i + ")'>&times;</a></span></span> ";
     }
 }
 
