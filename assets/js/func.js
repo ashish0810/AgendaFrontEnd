@@ -21,7 +21,7 @@ function login() {
             if (response.statusCode == 200) {
                 console.log("Successful login");
                 // go to agenda with login info
-                setCookie(response.body.user, response.body.name, response.body.color, response.body.class_value, response.body.token);
+                setCookie(response.body.user, response.body.name, response.body.class_value, response.body.token);
                 document.location.href = "agenda.html";
             } else if (response.statusCode == 201) {
                 console.log("Invalid login");
@@ -44,7 +44,6 @@ function register() {
     var user = document.getElementById("register-user").value;
     var pass = document.getElementById("register-pass").value;
     var passConf = document.getElementById("register-pass-conf").value;
-    var color = document.getElementById("register-color").value;
     var classes = document.getElementById("register-classes").value;
     var errorBox = document.getElementById("register-error-box");
     errorBox.innerHTML = "";
@@ -76,14 +75,13 @@ function register() {
             'name': name,
             'user': user,
             'pass': pass,
-            'color': color,
             'classes': classes
         },
         dataType: "json",
         success: function(response) {
             console.log(response);
             if (response.statusCode == 200) {
-                setCookie(response.body.user, response.body.name, response.body.color, response.body.class_value, response.body.token);
+                setCookie(response.body.user, response.body.name, response.body.class_value, response.body.token);
                 document.location.href = "agenda.html";
             } else if (response.statusCode == 201) {
                 errorBox.innerHTML = "Something went wrong, the agenda service might be down or inaccessible";
@@ -96,7 +94,6 @@ function changeSettings() {
     var name = document.getElementById("settings-name").value;
     var pass = document.getElementById("settings-pass").value;
     var passConf = document.getElementById("settings-pass-conf").value;
-    var color = document.getElementById("settings-color").value;
     var classes = document.getElementById("settings-classes").value;
     var user = getCookie("user");
     var token = getCookie("token");
@@ -129,7 +126,6 @@ function changeSettings() {
             data: {
                 'user': user,
                 'name': name,
-                'color': color,
                 'classes': classes
             },
             dataType: "json",
@@ -145,7 +141,6 @@ function changeSettings() {
             data: {
                 'user': user,
                 'name': name,
-                'color': color,
                 'classes': classes,
                 'pass': pass
             },
@@ -157,7 +152,7 @@ function changeSettings() {
 
 function updateCallback(response) {
     if (response.statusCode == 200) {
-        setCookie(response.body.user, response.body.name, response.body.color, response.body.class_value, response.body.token);
+        setCookie(response.body.user, response.body.name, response.body.class_value, response.body.token);
         document.location.href = "agenda.html";
     } else if (response.statusCode == 201) {
         logout();
@@ -195,10 +190,9 @@ function deleteUser() {
 function fillAgendaPage() {
     var user = getCookie("user");
     var name = getCookie("name");
-    var color = getCookie("color");
     var class_value = getCookie("classes");
     var token = getCookie("token");
-    if (user == "" || name == "" || color == "" || token == "") {
+    if (user == "" || name == "" || token == "") {
         logout();
     }
     var classes = class_value.split(",");
@@ -213,7 +207,6 @@ function fillAgendaPage() {
 
     document.getElementById("settings-name").value = name;
     document.getElementById("settings-user").value = user;
-    document.getElementById("settings-color").value = color;
     document.getElementById("settings-classes").value = class_value;
 }
 
@@ -508,11 +501,9 @@ function showDeleteTaskSuccessMsg() {
 function fillSettingsPage() {
     var name = getCookie("name");
     var user = getCookie("user");
-    var color = getCookie("color");
     var classes = getCookie("classes");
     document.getElementById("settingsFormName").value = name;
     document.getElementById("settingsFormUser").value = user;
-    document.getElementById("settingsFormColor").value = color;
     document.getElementById("settingsFormClasses").value = classes;
 }
 
@@ -545,12 +536,11 @@ function dayString(num) {
     return days[num];
 }
 
-function setCookie(user, name, color, class_value, token) {
+function setCookie(user, name, class_value, token) {
     var d = new Date();
     d.setTime(d.getTime() + (30*60*1000));
     document.cookie = "user=" + user + ";expires=" + d.toUTCString() + ";path=/";
     document.cookie = "name=" + name + ";expires=" + d.toUTCString() + ";path=/";
-    document.cookie = "color=" + color + ";expires=" + d.toUTCString() + ";path=/";
     document.cookie = "classes=" + class_value + ";expires=" + d.toUTCString() + ";path=/";
     document.cookie = "token=" + token + ";expires=" + d.toUTCString() + ";path=/";
 }
@@ -574,7 +564,6 @@ function getCookie(cname) {
 function clearCookies() {
     document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.cookie = "color=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "classes=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
