@@ -592,7 +592,7 @@ function dayString(num) {
 
 function setCookie(user, name, class_value, token) {
     var d = new Date();
-    d.setTime(d.getTime() + (30*60*1000));
+    d.setTime(d.getTime() + (24*60*60*1000));
     document.cookie = "user=" + user + ";expires=" + d.toUTCString() + ";path=/";
     document.cookie = "name=" + name + ";expires=" + d.toUTCString() + ";path=/";
     document.cookie = "classes=" + class_value + ";expires=" + d.toUTCString() + ";path=/";
